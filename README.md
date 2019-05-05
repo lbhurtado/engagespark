@@ -1,11 +1,9 @@
-# Very short description of the package
+# engageSpark Laravel Notification Package
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/lbhurtado/engagespark.svg?style=flat-square)](https://packagist.org/packages/lbhurtado/engagespark)
 [![Build Status](https://img.shields.io/travis/lbhurtado/engagespark/master.svg?style=flat-square)](https://travis-ci.org/lbhurtado/engagespark)
 [![Quality Score](https://img.shields.io/scrutinizer/g/lbhurtado/engagespark.svg?style=flat-square)](https://scrutinizer-ci.com/g/lbhurtado/engagespark)
 [![Total Downloads](https://img.shields.io/packagist/dt/lbhurtado/engagespark.svg?style=flat-square)](https://packagist.org/packages/lbhurtado/engagespark)
-
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
 
 ## Installation
 
