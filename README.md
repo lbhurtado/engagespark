@@ -15,10 +15,64 @@ You can install the package via composer:
 composer require lbhurtado/engagespark
 ```
 
+required environment variables:
+
+```dotenv
+ENGAGESPARK_API_KEY=
+ENGAGESPARK_ORGANIZATION_ID=
+ENGAGESPARK_SMS_WEBHOOK=
+ENGAGESPARK_AIRTIME_WEBHOOK=
+ENGAGESPARK_SENDER_ID=
+```
+
+optional environment variables:
+
+```dotenv
+ENGAGESPARK_SENDER_ID=
+ENGAGESPARK_SMS_WEBHOOK=
+ENGAGESPARK_AIRTIME_WEBHOOK=
+```
+
+optional configuration:
+
+```bash
+php artisan vendor:publish --provider="LBHurtado\EngageSpark\EngageSparkServiceProvider"
+```
+
 ## Usage
 
+in your notification:
+
 ``` php
-// Usage description here
+use LBHurtado\EngageSpark\EngageSparkChannel;
+use LBHurtado\EngageSpark\EngageSparkMessage;
+
+public function via($notifiable)
+{
+    return [EngageSparkChannel::class];
+}
+ 
+public function toEngageSpark($notifiable)
+{
+    return (new EngageSparkMessage())
+        ->content('The quick brown fox jumps over the lazy dog.')
+        ;
+}   
+```
+
+in your notifiable model:
+
+``` php
+use Illuminate\Notifications\Notifiable;
+
+public function routeNotificationForEngageSpark()
+{
+    return $this->mobile;
+} 
+```
+
+``` php
+$user->notify(new EngageSparkSMSReminder());
 ```
 
 ### Testing
