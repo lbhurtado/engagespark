@@ -7,7 +7,7 @@ use GuzzleHttp\Client as HttpClient;
 
 class EngageSpark
 {
-    const DEFAULT_SENDER_ID = 'serbis.io';
+    const DEFAULT_SENDER_ID = 'INFO';
 
     const FORMAT_JSON = 3;
 

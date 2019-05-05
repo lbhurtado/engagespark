@@ -4,8 +4,6 @@ namespace LBHurtado\EngageSpark;
 
 use Illuminate\Support\Arr;
 use Illuminate\Notifications\Notification;
-use LBHurtado\EngageSpark\EngageSpark;
-use LBHurtado\EngageSpark\EngageSparkMessage;
 
 class EngageSparkChannel
 {
