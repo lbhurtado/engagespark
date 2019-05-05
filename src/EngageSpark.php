@@ -73,7 +73,7 @@ class EngageSpark
         }
     }
 
-    protected function getEndPoint($mode)
+    public function getEndPoint($mode)
     {
         return Arr::get($this->end_points, $mode, $this->end_points['sms']);
     }
