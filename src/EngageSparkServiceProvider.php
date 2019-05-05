@@ -52,6 +52,10 @@ class EngageSparkServiceProvider extends ServiceProvider
         // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'engagespark');
 
+        $this->app->singleton(EngageSpark::class, function ($app) {
+            return new EngageSpark($app['config']['services.engagespark']);
+        });
+
         // Register the main class to use with the facade
         $this->app->singleton('engagespark', function () {
             return new EngageSpark;
