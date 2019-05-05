@@ -20,9 +20,6 @@ required environment variables:
 ```dotenv
 ENGAGESPARK_API_KEY=
 ENGAGESPARK_ORGANIZATION_ID=
-ENGAGESPARK_SMS_WEBHOOK=
-ENGAGESPARK_AIRTIME_WEBHOOK=
-ENGAGESPARK_SENDER_ID=
 ```
 
 optional environment variables:
