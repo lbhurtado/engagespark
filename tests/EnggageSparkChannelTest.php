@@ -19,9 +19,6 @@ class EngageSparkChannelTest extends TestCase
     {
         parent::setUp();
     	
-    	\Config::set('engagespark.api_key', 'b3867ab758b3fea05a4f40124e0e4f52c399ed12');
-    	\Config::set('engagespark.org_id', '7858');
-
         $this->engagespark = Mockery::mock(EngageSpark::class);
         $this->channel = new EngageSparkChannel($this->engagespark);
     }
@@ -36,11 +33,12 @@ class EngageSparkChannelTest extends TestCase
     /** @test */
     public function it_can_send_a_notification()
     {
-    	Notification::fake();
+        $this->engagespark->shouldReceive('getOrgId')->once()->andReturn('7858');
+        $this->engagespark->shouldReceive('getSenderId')->once()->andReturn('INFO');
+        $this->engagespark->shouldReceive('send')->once();
 
-    	$this->testUser->notify(new TestNotification());
+        $this->channel->send($this->testUser, new TestNotification());
 
-        Notification::assertSentTo($this->testUser, TestNotification::class);
         $this->assertTrue(true);
     }
 }
