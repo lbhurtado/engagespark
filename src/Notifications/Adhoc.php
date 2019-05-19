@@ -2,9 +2,8 @@
 
 namespace LBHurtado\EngageSpark\Notifications;
 
-class AdhocNotification extends BaseNotification
+class Adhoc extends BaseNotification
 {
-
     public function getContent($notifiable)
     {
         return $this->message;

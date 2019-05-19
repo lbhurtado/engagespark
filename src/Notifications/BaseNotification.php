@@ -16,7 +16,6 @@ abstract class BaseNotification extends Notification
     /** @var string */
     protected $message;
 
-
     public function __construct($message = null)
     {
         $this->message = $message;
@@ -45,7 +44,7 @@ abstract class BaseNotification extends Notification
     {
         return [
             'mobile' => $notifiable->mobile,
-            'message' => $this->getContent($notifiable),
+            'content' => $this->getContent($notifiable),
             'mode' => $this->getMode($notifiable)
         ];
     }
