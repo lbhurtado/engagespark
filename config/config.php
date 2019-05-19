@@ -19,4 +19,8 @@ return [
             ? [env('NOTIFICATION_CLASS', EngageSparkChannel::class)]
             : []),
     ],
+    'topup' => [
+        'minimum' => env('ENGAGESPARK_MIN_TOPUP', 15),
+        'maximum' => env('ENGAGESPARK_MAX_TOPUP', 1000),
+    ],
 ];

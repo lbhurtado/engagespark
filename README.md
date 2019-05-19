@@ -29,6 +29,7 @@ ENGAGESPARK_SENDER_ID=
 ENGAGESPARK_SMS_WEBHOOK=
 ENGAGESPARK_AIRTIME_WEBHOOK=
 NOTIFICATION_CLASS=
+ENGAGESPARK_MIN_TOPUP=
 ```
 
 optional configuration:
@@ -69,8 +70,14 @@ public function routeNotificationForEngageSpark()
 } 
 ```
 
+in your application:
+
 ``` php
-$user->notify(new EngageSparkSMSReminder());
+use LBHurtado\EngageSpark\Notifications\Toup;
+use LBHurtado\EngageSpark\Notifications\Adhoc;
+
+$user->notify(new Adhoc('The quick brown fox...'));
+$user->notify(new Topup(25);
 ```
 
 ### Testing
