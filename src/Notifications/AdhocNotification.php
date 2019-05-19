@@ -2,7 +2,6 @@
 
 namespace LBHurtado\EngageSpark\Notifications;
 
-
 class AdhocNotification extends BaseNotification
 {
 
