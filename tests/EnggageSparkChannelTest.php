@@ -6,6 +6,7 @@ use Mockery;
 use LBHurtado\EngageSpark\EngageSpark;
 use Illuminate\Support\Facades\Notification;
 use LBHurtado\EngageSpark\EngageSparkChannel;
+use LBHurtado\EngageSpark\Notifications\AdhocNotification;
 
 class EngageSparkChannelTest extends TestCase
 {
@@ -37,7 +38,7 @@ class EngageSparkChannelTest extends TestCase
         $this->engagespark->shouldReceive('getSenderId')->once()->andReturn('INFO');
         $this->engagespark->shouldReceive('send')->once();
 
-        $this->channel->send($this->testUser, new TestNotification());
+        $this->channel->send($this->testUser, new AdhocNotification('test message'));
 
         $this->assertTrue(true);
     }

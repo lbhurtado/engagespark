@@ -11,6 +11,8 @@ You can install the package via composer:
 
 ```bash
 composer require lbhurtado/engagespark
+php artisan notifications:table
+php artisan migrate
 ```
 
 required environment variables:
@@ -26,6 +28,7 @@ optional environment variables:
 ENGAGESPARK_SENDER_ID=
 ENGAGESPARK_SMS_WEBHOOK=
 ENGAGESPARK_AIRTIME_WEBHOOK=
+NOTIFICATION_CLASS=
 ```
 
 optional configuration:

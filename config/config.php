@@ -1,5 +1,7 @@
 <?php
 
+use LBHurtado\EngageSpark\EngageSparkChannel;
+
 return [
     'api_key' => env('ENGAGESPARK_API_KEY'),
     'org_id' => env('ENGAGESPARK_ORGANIZATION_ID'),
@@ -11,5 +13,10 @@ return [
     'web_hooks' => [
         'sms' => env('ENGAGESPARK_SMS_WEBHOOK', env('APP_URL', 'http://localhost') . '/webhook/engagespark/sms'),
         'topup' => env('ENGAGESPARK_AIRTIME_WEBHOOK', env('APP_URL', 'http://localhost') . '/webhook/engagespark/airtime'),
+    ],
+    'notification' => [
+        'channels' => array_merge(['database'], env('SEND_NOTIFICATION', false)
+            ? [env('NOTIFICATION_CLASS', EngageSparkChannel::class)]
+            : []),
     ],
 ];
