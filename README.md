@@ -60,7 +60,6 @@ public function toEngageSpark($notifiable)
 ```
 
 in your notifiable model:
-
 ``` php
 use Illuminate\Notifications\Notifiable;
 
@@ -68,6 +67,15 @@ public function routeNotificationForEngageSpark()
 {
     return $this->mobile;
 } 
+```
+or use the trait:
+``` php
+use LBHurtado\EngageSpark\Traits\HasEngageSpark;
+
+class Contact extends Model 
+{
+    use HasEngageSpark;
+}
 ```
 
 in your application:

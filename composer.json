@@ -3,7 +3,8 @@
     "description": "This package makes it easy to send SMS notifications via engageSPARK with Laravel.",
     "keywords": [
         "lbhurtado",
-        "engagespark"
+        "engagespark",
+        "sms"
     ],
     "homepage": "https://github.com/lbhurtado/engagespark",
     "license": "MIT",
