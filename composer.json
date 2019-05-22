@@ -1,6 +1,6 @@
 {
     "name": "lbhurtado/engagespark",
-    "description": "This package makes it easy to send SMS notifications via engageSPARK with Laravel.",
+    "description": "This package makes it easy to send SMS notifications and topups via engageSPARK with Laravel.",
     "keywords": [
         "lbhurtado",
         "engagespark",
@@ -24,6 +24,9 @@
     "require-dev": {
         "orchestra/testbench": "3.8.*",
         "phpunit/phpunit": "^7.0"
+    },
+    "suggest": {
+        "lbhurtado/missive": "Add SMS domain to a Laravel project - route, models, migrations, jobs, notifications, etc."
     },
     "autoload": {
         "psr-4": {
