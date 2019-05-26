@@ -81,7 +81,7 @@ class Contact extends Model
 in your application:
 
 ``` php
-use LBHurtado\EngageSpark\Notifications\Toup;
+use LBHurtado\EngageSpark\Notifications\Topup
 use LBHurtado\EngageSpark\Notifications\Adhoc;
 
 $user->notify(new Adhoc('The quick brown fox...'));
