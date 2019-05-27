@@ -2,6 +2,7 @@
 
 namespace LBHurtado\EngageSpark;
 
+use GuzzleHttp\Client as HttpClient;
 use Illuminate\Support\ServiceProvider;
 
 class EngageSparkServiceProvider extends ServiceProvider
@@ -26,7 +27,10 @@ class EngageSparkServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'engagespark');
 
         $this->app->singleton(EngageSpark::class, function ($app) {
-            return new EngageSpark($app['config']['engagespark']);
+            return new EngageSpark(new HttpClient([
+                // 'timeout'         => 5,
+                // 'connect_timeout' => 5,
+            ]));
         });
     }
 }

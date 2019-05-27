@@ -42,12 +42,6 @@ class EngageSparkChannel
         }
 
         $this->setClientRef($notification)->sendMessage($to, $message);
-
-        //$response = [a call to the api of your notification send]
-
-//        if ($response->error) { // replace this by the code need to check for errors
-//            throw CouldNotSendNotification::serviceRespondedWithAnError($response);
-//        }
     }
 
     /**
@@ -71,10 +65,6 @@ class EngageSparkChannel
 
     protected function sendMessage($recipients, EngageSparkMessage $message)
     {
-        // if (\mb_strlen($message->content) > 800) {
-        //     throw CouldNotSendNotification::contentLengthLimitExceeded();
-        // }
-
         $this->setMode($message);
 
         switch ($mode = $this->getMode()) {
@@ -93,9 +83,7 @@ class EngageSparkChannel
                     'organizationId'  => $this->getOrgId(),
                     'phoneNumber'     => Arr::first($recipients),
                     'maxAmount'       => $message->air_time,
-//                    'apiToken'        => $this->getApiToken(),
                     'clientRef'       => $this->getClientRef(),
-//                    'resultsUrl'      => $this->getWebHook($message),
                 ];
                 break;
 
@@ -121,12 +109,7 @@ class EngageSparkChannel
         return $this->smsc->getOrgId();
     }
 
-    protected function getApiToken()
-    {
-        return $this->smsc->getApiKey();
-    }
-
-    protected function getClientRef()
+    public function getClientRef()
     {
         return $this->clientRef;
     }

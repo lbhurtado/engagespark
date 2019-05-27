@@ -45,6 +45,8 @@ class TestCase extends OrchestraTestCase
             'prefix' => '',
         ]);
         $app['config']->set('auth.providers.users.model', User::class);
+        $app['config']->set('engagespark.api_key', 'b3867ab758b3fea05a4f40124e0e4f52c399ed12');
+        $app['config']->set('engagespark.org_id', '7858');
     }
 
 

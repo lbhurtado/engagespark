@@ -7,10 +7,6 @@ use GuzzleHttp\Client as HttpClient;
 
 class EngageSpark
 {
-    const DEFAULT_SENDER_ID = 'INFO';
-
-    const FORMAT_JSON = 3;
-
     /** @var HttpClient */
     protected $client;
 
@@ -26,75 +22,121 @@ class EngageSpark
     /** @var string */
     protected $sender_id;
 
-    /** @var array */
-    protected $web_hooks;
-
-    public function __construct(array $config)
+    /**
+     * EngageSpark constructor.
+     * @param HttpClient $client
+     */
+    public function __construct(HttpClient $client)
     {
-        $this->end_points = Arr::get($config, 'end_points');
-        $this->api_key 	  = Arr::get($config, 'api_key');
-        $this->org_id     = Arr::get($config, 'org_id');
-        $this->sender_id  = Arr::get($config, 'sender_id', static::DEFAULT_SENDER_ID);
-        $this->client     = new HttpClient([
-            // 'timeout'         => 5,
-            // 'connect_timeout' => 5,
-        ]);
-        $this->web_hooks  = Arr::get($config, 'web_hooks');
+        $this->client = $client;
+        $this->initializeProperties();
     }
 
+    /**
+     * Set protected and public properties.
+     */
+    protected function initializeProperties(): void
+    {
+        tap(config('engagespark'), function($config) {
+            $this->end_points = Arr::get($config, 'end_points');
+            $this->api_key    = Arr::get($config, 'api_key');
+            $this->org_id     = Arr::get($config, 'org_id');
+            $this->sender_id  = Arr::get($config, 'sender_id');
+        });
+    }
+
+    /**
+     * @param $params
+     * @param string $mode
+     * @return mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function send($params, $mode = 'sms')
     {
-        $base = [
-//             'organization_id'   => $this->getOrgId(),
-        ];
-        $params = \array_merge($base, \array_filter($params));
+        $endPoint = $this->getEndPoint($mode);
+        $request = $this->getFormattedRequestHeadersAndJsonData($params);
 
-        try {
-            $response = $this->client->request('POST', $this->getEndPoint($mode), [
-                'headers' => [
-                    'Authorization' => 'Token ' . $this->api_key,
-                    'Accept' => 'application/json',
-                ],
-                'json' => $params
-            ]);
-
-            $response = \json_decode((string) $response->getBody(), true);
-
-            // if (isset($response['error'])) {
-            //     throw new \DomainException($response['error'], $response['error_code']);
-            // }
-
-            return $response;
-            // } catch (\DomainException $exception) {
-            //     throw CouldNotSendNotification::smscRespondedWithAnError($exception);
-        } catch (\Exception $exception) {
-            // throw CouldNotSendNotification::couldNotCommunicateWithSmsc($exception);
-            throw $exception;
-        }
+        return optional($this->client->request('POST', $endPoint, $request), function ($response) {
+            return $this->getFormattedResponse($response);
+        });
     }
 
-    public function getEndPoint($mode)
-    {
-        return Arr::get($this->end_points, $mode, $this->end_points['sms']);
-    }
-
-    public function getWebHook($mode)
-    {
-        return Arr::get($this->web_hooks, $mode, $this->web_hooks['sms']);
-    }
-
+    /**
+     * @return string
+     */
     public function getOrgId()
     {
         return $this->org_id;
     }
 
-    public function getApiKey()
+    /**
+     * @return string
+     */
+    public function getSenderId()
+    {
+        return $this->sender_id;
+    }
+
+    /**
+     * @param $mode
+     * @return mixed
+     */
+    public function getEndPoint($mode)
+    {
+        return Arr::get($this->end_points, $mode, $this->end_points['sms']);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getApiKey()
     {
         return $this->api_key;
     }
 
-    public function getSenderId()
+    /**
+     * @return array
+     */
+    protected function getHeaders()
     {
-        return $this->sender_id;
+        return [
+            'Authorization' => "Token {$this->getApiKey()}",
+            'Accept' => 'application/json',
+        ];
+    }
+
+    /**
+     * There may be base parameters in the future. Just putting it here.
+     *
+     * @param array $params
+     * @return array
+     */
+    protected function consolidateParams(array $params)
+    {
+        $base = [];
+
+        return \array_merge($base, \array_filter($params));
+    }
+
+    /**
+     * @param $params
+     * @return array
+     */
+    protected function getFormattedRequestHeadersAndJsonData($params): array
+    {
+        return [
+            'headers' => $this->getHeaders(),
+            'json' => $this->consolidateParams($params)
+        ];
+    }
+
+    /**
+     * @param \Psr\Http\Message\ResponseInterface $response
+     * @return mixed|\Psr\Http\Message\ResponseInterface
+     */
+    protected function getFormattedResponse(\Psr\Http\Message\ResponseInterface $response)
+    {
+        $response = \json_decode((string)$response->getBody(), true);
+        return $response;
     }
 }
