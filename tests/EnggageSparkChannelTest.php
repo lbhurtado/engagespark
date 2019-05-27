@@ -5,7 +5,7 @@ namespace LBHurtado\EngageSpark\Tests;
 use Mockery;
 use LBHurtado\EngageSpark\EngageSpark;
 use LBHurtado\EngageSpark\EngageSparkChannel;
-use LBHurtado\EngageSpark\Notifications\Adhoc;
+use LBHurtado\EngageSpark\Notifications\{Adhoc, Topup};
 
 class EngageSparkChannelTest extends TestCase
 {
@@ -38,6 +38,17 @@ class EngageSparkChannelTest extends TestCase
         $this->engagespark->shouldReceive('send')->once();
 
         $this->channel->send($this->testUser, new Adhoc('test message'));
+
+        $this->assertTrue(true);
+    }
+
+    /** @test */
+    public function it_can_topup()
+    {
+        $this->engagespark->shouldReceive('getOrgId')->once()->andReturn('7858');
+        $this->engagespark->shouldReceive('send')->once();
+
+        $this->channel->send($this->testUser, new Topup(25));
 
         $this->assertTrue(true);
     }

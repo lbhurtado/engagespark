@@ -93,9 +93,9 @@ class EngageSparkChannel
                     'organizationId'  => $this->getOrgId(),
                     'phoneNumber'     => Arr::first($recipients),
                     'maxAmount'       => $message->air_time,
-                    'apiToken'        => $this->getApiToken(),
+//                    'apiToken'        => $this->getApiToken(),
                     'clientRef'       => $this->getClientRef(),
-                    'resultsUrl'      => $this->getWebHook($message),
+//                    'resultsUrl'      => $this->getWebHook($message),
                 ];
                 break;
 

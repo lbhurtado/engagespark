@@ -45,7 +45,7 @@ class EngageSpark
     public function send($params, $mode = 'sms')
     {
         $base = [
-             'organization_id'   => $this->getOrgId(),
+//             'organization_id'   => $this->getOrgId(),
         ];
         $params = \array_merge($base, \array_filter($params));
 
