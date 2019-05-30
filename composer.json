@@ -19,7 +19,8 @@
     "require": {
         "php": "^7.1",
         "guzzlehttp/guzzle": "^6.3",
-        "illuminate/support": "5.8.*"
+        "illuminate/support": "5.8.*",
+        "lbhurtado/common": "dev-master"
     },
     "require-dev": {
         "orchestra/testbench": "3.8.*",
