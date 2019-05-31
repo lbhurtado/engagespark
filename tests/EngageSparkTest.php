@@ -3,8 +3,9 @@
 namespace LBHurtado\EngageSpark\Tests;
 
 use Mockery;
-use Illuminate\Support\Str;
 use GuzzleHttp\Client;
+use Illuminate\Support\Str;
+
 use LBHurtado\EngageSpark\EngageSpark;
 
 use GuzzleHttp\Handler\MockHandler;
@@ -13,11 +14,14 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\RequestException;
 
-
 use LBHurtado\EngageSpark\Classes\SendHttpApiParams;
+use LBHurtado\EngageSpark\Classes\TopupHttpApiParams;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class EngageSparkTest extends TestCase
 {
+    use WithFaker;
+
     /** @var HttpClient */
     protected $client;
 
@@ -26,7 +30,6 @@ class EngageSparkTest extends TestCase
         parent::setUp();
 
         $this->client = Mockery::mock(Client::class);
-        // $this->service = new EngageSpark($this->client);
     }
 
    /** @test */
@@ -52,14 +55,13 @@ class EngageSparkTest extends TestCase
         $service = new EngageSpark($this->client);
         $params = new SendHttpApiParams(
             $org_id = $service->getOrgId(), 
-            $mobile_number = '+639173011987', 
-            $message = 'The quick brown fox jumps over the lazy dog - again.', 
-            $sender_id = 'TXTCMDR'
+            $mobile_number =  $this->faker->phoneNumber,
+            $message = $this->faker->sentence,
+            $sender_id = $this->faker->word
         );
 
-        //TODO: wait for engagespark api to send response just like topup
         /*** assert ***/
-        $this->client->shouldReceive('request')->once();
+        $this->client->shouldReceive('request')->once(); //TODO: wait for engagespark api to send response just like topup
 
         /*** act ***/
         $service->send($params->toArray(), 'sms');
@@ -69,21 +71,19 @@ class EngageSparkTest extends TestCase
     public function it_topups_an_amount()
     {
         /*** arrange ***/
-        $phoneNumber = '+639171234567';
-        $maxAmount = '10';
-        $amountSent = '10';
-        $price = "0.263";
-        $status = "Success";
-        $errorMessage = "The value was successfully delivered to the recipient";
-        $clientRef = "ABC1234567890";
-        $createdDate = "2019-05-30 02:09:57";
-
-        $json = json_encode(compact('phoneNumber', 'maxAmount', 'amountSent', 'price', 'status', 'errorMessage', 'clientRef', 'createdDate'));
-
+        $json = json_encode([
+            'phoneNumber' => $phoneNumber = $this->faker->phoneNumber,
+            '$maxAmount' => $maxAmount = $this->faker->numberBetween(10,25),
+            'amountSent' => $amountSent = $maxAmount,
+            '$price' => $price = $amountSent/50,
+            'status' => $status = "Success",
+            'errorMessage' => $errorMessage = "The value was successfully delivered to the recipient",
+            '$clientRef' => $clientRef = Str::random(10),
+            '$createdDate' => $createdDate = "2019-05-30 02:09:57"
+        ]);
         $mock = new MockHandler([
             new Response(200, [], $json),
         ]);
-
         $handler = HandlerStack::create($mock);
         $client = new Client(['handler' => $handler]);
         $service = new EngageSpark($client);

@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use LBHurtado\Common\Contracts\HttpApiParams;
 
-class TopupAmount implements ShouldQueue
+class TransferAirtime implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -20,7 +20,7 @@ class TopupAmount implements ShouldQueue
     public $params;
 
     /**
-     * EngageSparkTopupAmount constructor.
+     * TopupAmount constructor.
      * @param HttpApiParams $params
      */
     public function __construct(HttpApiParams $params)
