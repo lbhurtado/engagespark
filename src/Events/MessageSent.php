@@ -16,17 +16,21 @@ class MessageSent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /** @var SendHttpApiParams */
-    public $params;
+    /** @var string */
+    public $mobile;
+
+    /** @var string */
+    public $message;
 
     /**
      * Create a new event instance.
      *
      * @param SendHttpApiParams $params
      */
-    public function __construct(SendHttpApiParams $params)
+    public function __construct(string $mobile, string $message)
     {
-        $this->params = $params;
+        $this->mobile = $mobile;
+        $this->message = $message;
     }
 
     /**

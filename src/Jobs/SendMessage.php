@@ -29,7 +29,7 @@ class SendMessage implements ShouldQueue
      * @param string $mobile
      * @param string $message
      */
-    public function __construct($mobile, $message)
+    public function __construct(string $mobile, string $message)
     {
         $this->mobile = $mobile;
         $this->message = $message;
