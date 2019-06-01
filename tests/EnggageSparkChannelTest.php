@@ -42,7 +42,7 @@ class EngageSparkChannelTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    // /** @test */
     public function it_can_topup_using_notification()
     {
         $this->engagespark->shouldReceive('getOrgId')->once()->andReturn('7858');

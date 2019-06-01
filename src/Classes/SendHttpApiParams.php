@@ -2,19 +2,21 @@
 
 namespace LBHurtado\EngageSpark\Classes;
 
+use Illuminate\Support\Arr;
+use LBHurtado\EngageSpark\EngageSpark;
 use LBHurtado\Common\Contracts\HttpApiParams;
 
 class SendHttpApiParams implements HttpApiParams
 {
     /**
-     * @var int
+     * @var EngageSpark
      */
-    protected $org_id;
+    protected $service;
 
     /**
      * @var string
      */
-    protected $mobile_number;
+    protected $mobile;
 
     /**
      * @var string
@@ -24,42 +26,28 @@ class SendHttpApiParams implements HttpApiParams
     /**
      * @var string
      */
-    protected $sender_id;
-
-    /**
-     * @var string
-     */
     protected $recipientType = 'mobile_number';
 
     /**
      * SendParams constructor.
-     * @param $org_id
-     * @param $mobile_number
+     * @param $service
+     * @param $mobile
      * @param $message
-     * @param $sender_id
      */
-    public function __construct(int $org_id, string $mobile_number, string $message, string $sender_id = null)
+    public function __construct(EngageSpark $service, string $mobile, string $message)
     {
-        $this->org_id = $org_id;
-        $this->mobile_number = $mobile_number;
+        $this->service = $service;
+        $this->mobile = $mobile;
         $this->message = $message;
-        $this->sender_id = $sender_id; //TODO: read ENGAGESPARK_SENDER_ID from .env
-    }
-
-    public function setRecipientType(string $recipientType)
-    {
-        $this->recipientType = $recipientType;
-
-        return $this;
     }
 
     public function toArray(): array
     {
         return [
-            'organization_id' => $this->org_id,
-            'mobile_numbers' => [$this->mobile_number],
+            'organization_id' => $this->service->getOrgId(),
+            'mobile_numbers' => Arr::wrap($this->mobile),
             'message' => $this->message,
-            'sender_id' => $this->sender_id,
+            'sender_id' => $this->service->getSenderId(),
             'recipient_type'  => $this->recipientType,
         ];
     }

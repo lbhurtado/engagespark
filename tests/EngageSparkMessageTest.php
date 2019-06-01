@@ -3,6 +3,7 @@
 namespace LBHurtado\EngageSpark\Tests;
 
 use LBHurtado\EngageSpark\EngageSparkMessage;
+use LBHurtado\EngageSpark\Classes\ServiceMode;
 
 class EngageSparkMessageTest extends TestCase
 {
@@ -38,15 +39,14 @@ class EngageSparkMessageTest extends TestCase
     /** @test */
     public function can_automatically_set_sms_mode_property_automatically_after_instantation()
     {
-    	$mode = "sms";
-
+    	$mode = ServiceMode::SMS;
     	$this->assertEquals($this->message->mode, $mode);
     }
 
     /** @test */
     public function can_manually_set_mode_property_after_instantation()
     {
-    	$mode = "topup";
+    	$mode = ServiceMode::TOPUP;
     	$msg = $this->message->mode($mode);
 
     	$this->assertEquals($this->message->mode, $mode);

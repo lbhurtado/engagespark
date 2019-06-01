@@ -4,6 +4,7 @@ namespace LBHurtado\EngageSpark;
 
 use Illuminate\Support\Arr;
 use GuzzleHttp\Client as HttpClient;
+use LBHurtado\EngageSpark\Classes\ServiceMode;
 
 class EngageSpark
 {
@@ -51,7 +52,7 @@ class EngageSpark
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function send($params, $mode = 'sms')
+    public function send($params, $mode = ServiceMode::SMS)
     {
         $endPoint = $this->getEndPoint($mode);
         $request = $this->getFormattedRequestHeadersAndJsonData($params);

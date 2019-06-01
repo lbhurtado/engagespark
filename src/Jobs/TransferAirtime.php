@@ -8,7 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use LBHurtado\Common\Contracts\HttpApiParams;
+use  LBHurtado\EngageSpark\Classes\TopupHttpApiParams;
 
 class TransferAirtime implements ShouldQueue
 {
@@ -16,14 +16,14 @@ class TransferAirtime implements ShouldQueue
 
     const MODE = 'topup';
 
-    /** @var HttpApiParams */
+    /** @var TopupHttpApiParams */
     public $params;
 
     /**
      * TopupAmount constructor.
-     * @param HttpApiParams $params
+     * @param TopupHttpApiParams $params
      */
-    public function __construct(HttpApiParams $params)
+    public function __construct(TopupHttpApiParams $params)
     {
         $this->params = $params;
     }

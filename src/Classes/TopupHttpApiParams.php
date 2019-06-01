@@ -2,19 +2,20 @@
 
 namespace LBHurtado\EngageSpark\Classes;
 
+use LBHurtado\EngageSpark\EngageSpark;
 use LBHurtado\Common\Contracts\HttpApiParams;
 
 class TopupHttpApiParams implements HttpApiParams
 {
     /**
-     * @var int
+     * @var EngageSpark
      */
-    protected $org_id;
+    protected $service;
 
     /**
      * @var string
      */
-    protected $mobile_number;
+    protected $mobile;
 
     /**
      * @var int
@@ -33,15 +34,15 @@ class TopupHttpApiParams implements HttpApiParams
 
     /**
      * SendParams constructor.
-     * @param $org_id
+     * @param $service
      * @param $mobile_number
      * @param $amount
      * @param $reference
      */
-    public function __construct(int $org_id, string $mobile_number, int $amount, string $reference)
+    public function __construct(EngageSpark $service, string $mobile, int $amount, string $reference)
     {
-        $this->org_id = $org_id;
-        $this->mobile_number = $mobile_number;
+        $this->service = $service;
+        $this->mobile = $mobile;
         $this->amount = $amount;
         $this->reference = $reference;
     }
@@ -50,8 +51,8 @@ class TopupHttpApiParams implements HttpApiParams
     public function toArray(): array
     {
         return [
-            'organizationId' => $this->org_id,
-            'phoneNumber' => $this->mobile_number,
+            'organizationId' => $this->service->getOrgId(),
+            'phoneNumber' => $this->mobile,
             'maxAmount' => $this->amount,
             'clientRef'  => $this->reference,
         ];

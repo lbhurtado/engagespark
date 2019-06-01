@@ -5,24 +5,22 @@ namespace LBHurtado\EngageSpark\Tests;
 use Mockery;
 use GuzzleHttp\Client;
 use Illuminate\Support\Str;
-
-use LBHurtado\EngageSpark\EngageSpark;
-
-use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Handler\MockHandler;
+use LBHurtado\EngageSpark\EngageSpark;
 use GuzzleHttp\Exception\RequestException;
-
+use Illuminate\Foundation\Testing\WithFaker;
+use LBHurtado\EngageSpark\Classes\ServiceMode;
 use LBHurtado\EngageSpark\Classes\SendHttpApiParams;
 use LBHurtado\EngageSpark\Classes\TopupHttpApiParams;
-use Illuminate\Foundation\Testing\WithFaker;
 
 class EngageSparkTest extends TestCase
 {
     use WithFaker;
 
-    /** @var HttpClient */
+    /** @var \GuzzleHttp\Client */
     protected $client;
 
     public function setUp(): void
@@ -49,32 +47,30 @@ class EngageSparkTest extends TestCase
     }
 
     /** @test */
-    public function it_sends_a_message()
+    public function service_sends_a_message()
     {
         /*** arrange ***/
-        $service = new EngageSpark($this->client);
         $params = new SendHttpApiParams(
-            $org_id = $service->getOrgId(), 
-            $mobile_number =  $this->faker->phoneNumber,
-            $message = $this->faker->sentence,
-            $sender_id = $this->faker->word
+            $service = new EngageSpark($this->client),
+            $mobile =  $this->faker->phoneNumber,
+            $message = $this->faker->sentence
         );
 
         /*** assert ***/
         $this->client->shouldReceive('request')->once(); //TODO: wait for engagespark api to send response just like topup
 
         /*** act ***/
-        $service->send($params->toArray(), 'sms');
+        $service->send($params->toArray(), ServiceMode::SMS);
     }
 
    /** @test */
-    public function it_topups_an_amount()
+    public function service_topups_an_amount()
     {
         /*** arrange ***/
         $json = json_encode([
-            'phoneNumber' => $phoneNumber = $this->faker->phoneNumber,
-            '$maxAmount' => $maxAmount = $this->faker->numberBetween(10,25),
-            'amountSent' => $amountSent = $maxAmount,
+            'phoneNumber' => $mobile = $this->faker->phoneNumber,
+            '$maxAmount' => $amount = $this->faker->numberBetween(10,25),
+            'amountSent' => $amountSent = $amount,
             '$price' => $price = $amountSent/50,
             'status' => $status = "Success",
             'errorMessage' => $errorMessage = "The value was successfully delivered to the recipient",
@@ -90,13 +86,47 @@ class EngageSparkTest extends TestCase
 
         /*** act ***/
         $response = $service->send([
-            'organizationId'  => $service->getOrgId(),
-            'phoneNumber'     => $phoneNumber,
-            'maxAmount'       => (int) $maxAmount,
+            'phoneNumber'     => $mobile,
+            'maxAmount'       => (int) $amount,
             'clientRef'       => $clientRef,
-        ], 'topup');
+        ], ServiceMode::TOPUP);
 
         /*** assert ***/
         $this->assertEquals(json_decode($json, true), $response);
+    }
+
+   // /** @test */
+    public function service_actually_sends_a_message()
+    {
+        /*** arrange ***/
+        $params = new SendHttpApiParams(
+            $service = app(EngageSpark::class),
+            $mobile = '+639173011987',
+            $message = 'testing 5'
+        );
+
+        /*** act ***/
+        $service->send($params->toArray(), ServiceMode::SMS);
+
+        /*** assert ***/
+        $this->assertTrue(true);
+    }
+
+/** @test */
+    public function service_actually_topups_an_amount()
+    {
+        /*** arrange ***/
+        $params = new TopupHttpApiParams(
+            $service = app(EngageSpark::class),
+            $mobile = '+639366760473',// '+639166342969',
+            $amount = 10,
+            $reference = 'EngageSparkTest::service_actually_topups_an_amount'
+        );
+
+        /*** act ***/
+        $service->send($params->toArray(), ServiceMode::TOPUP);
+
+        /*** assert ***/
+        $this->assertTrue(true);
     }
 }

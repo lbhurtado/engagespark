@@ -6,9 +6,9 @@ use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
-use LBHurtado\Common\Contracts\HttpApiParams;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use LBHurtado\EngageSpark\Classes\SendHttpApiParams;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 
@@ -16,15 +16,15 @@ class MessageSent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /** @var HttpApiParams */
+    /** @var SendHttpApiParams */
     public $params;
 
     /**
      * Create a new event instance.
      *
-     * @param HttpApiParams $params
+     * @param SendHttpApiParams $params
      */
-    public function __construct(HttpApiParams $params)
+    public function __construct(SendHttpApiParams $params)
     {
         $this->params = $params;
     }

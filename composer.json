@@ -17,8 +17,9 @@
         }
     ],
     "require": {
-        "ext-json": "*",
         "php": "^7.1",
+        "ext-json": "*",
+        "eloquent/enumeration": "^6.0",
         "guzzlehttp/guzzle": "^6.3",
         "illuminate/support": "5.8.*",
         "lbhurtado/common": "^1.0"

@@ -8,7 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use LBHurtado\Common\Contracts\HttpApiParams;
+use LBHurtado\EngageSpark\Classes\SendHttpApiParams;
 
 class SendMessage implements ShouldQueue
 {
@@ -16,14 +16,14 @@ class SendMessage implements ShouldQueue
 
     const MODE = 'sms';
 
-    /** @var HttpApiParams */
+    /** @var SendHttpApiParams */
     public $params;
 
     /**
      * SendMessage constructor.
-     * @param HttpApiParams $params
+     * @param SendHttpApiParams $params
      */
-    public function __construct(HttpApiParams $params)
+    public function __construct(SendHttpApiParams $params)
     {
         $this->params = $params;
     }

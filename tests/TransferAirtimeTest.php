@@ -17,17 +17,18 @@ class TransferAirtimeTest extends TestCase
     public function job_can_transfer_airtime()
     {
         /*** arrange ***/
+        $service = Mockery::mock(EngageSpark::class);
         $params = new TopupHttpApiParams(
-            $org_id = $this->faker->numberBetween(1000,9999),
-            $mobile_number = $this->faker->phoneNumber,
+            $service,
+            $mobile = $this->faker->phoneNumber,
             $amount = $this->faker->numberBetween(25,100),
             $reference = Str::random(5)
         );
-        $service = Mockery::mock(EngageSpark::class);
+
         $job = new TransferAirtime($params);
 
         /*** assert ***/
-
+        $service->shouldReceive('getOrgId')->once();
         $service->shouldReceive('send')->once();
 
         /*** act ***/

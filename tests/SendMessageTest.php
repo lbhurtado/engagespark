@@ -16,17 +16,18 @@ class SendMessageTest extends TestCase
 	public function job_can_send_message()
 	{
         /*** arrange ***/
-        $params = new SendHttpApiParams(
-            $org_id = $this->faker->numberBetween(1000,9999),
-            $mobile_number = $this->faker->phoneNumber,
-            $message = $this->faker->sentence,
-            $sender_id = $this->faker->word
-        );
         $service = Mockery::mock(EngageSpark::class);
+        $params = new SendHttpApiParams(
+            $service,
+            $mobile_number = $this->faker->phoneNumber,
+            $message = $this->faker->sentence
+        );
+
         $job = new SendMessage($params);
 
         /*** assert ***/
-
+        $service->shouldReceive('getOrgId')->once();
+        $service->shouldReceive('getSenderId')->once();
         $service->shouldReceive('send')->once();
 
         /*** act ***/
