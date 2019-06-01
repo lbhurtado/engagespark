@@ -8,7 +8,6 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use LBHurtado\EngageSpark\Classes\SendHttpApiParams;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 

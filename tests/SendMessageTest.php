@@ -12,21 +12,57 @@ class SendMessageTest extends TestCase
 {
     use WithFaker;
 
+    protected $service;
+
+    protected $mobile;
+
+    protected $message;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->service = Mockery::mock(EngageSpark::class);
+        $this->mobile = $this->faker->phoneNumber;
+        $this->message = $this->faker->sentence;       
+    }
+
 	/** @test */
-	public function job_can_send_message()
+	public function job_can_send_message_with_sender_id()
 	{
         /*** arrange ***/
-        $service = Mockery::mock(EngageSpark::class);
-        $mobile = $this->faker->phoneNumber;
-        $message = $this->faker->sentence;
-        $job = new SendMessage($mobile, $message);
+        $senderId = $this->faker->word; 
+        $job = new SendMessage($this->mobile, $this->message, $senderId);
 
         /*** assert ***/
-        $service->shouldReceive('getOrgId')->once();
-        $service->shouldReceive('getSenderId')->once();
-        $service->shouldReceive('send')->once();
+        $this->service->shouldReceive('getOrgId')->once();
+        $this->service->shouldReceive('send')->once();
 
         /*** act ***/
-        $job->handle($service);
+        $job->handle($this->service);
+
+        /*** assert ***/
+        $this->assertEquals($this->mobile, $job->mobile);
+        $this->assertEquals($this->message, $job->message);
+        $this->assertEquals($senderId, $job->senderId);
 	}
+
+    /** @test */
+    public function job_can_send_message_without_sender_id()
+    {
+        /*** arrange ***/
+        $job = new SendMessage($this->mobile, $this->message);
+
+        /*** assert ***/
+        $this->service->shouldReceive('getOrgId')->once();
+        $this->service->shouldReceive('getSenderId')->once();
+        $this->service->shouldReceive('send')->once();
+
+        /*** act ***/
+        $job->handle($this->service);
+
+         /*** assert ***/
+        $this->assertEquals($this->mobile, $job->mobile);
+        $this->assertEquals($this->message, $job->message);
+    }
 }

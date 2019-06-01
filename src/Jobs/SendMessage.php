@@ -21,6 +21,9 @@ class SendMessage implements ShouldQueue
     /** @var string */
     public $message;
 
+    /** @var string */
+    public $senderId;
+
     /** @var EngageSpark */
     public $service;
 
@@ -29,10 +32,11 @@ class SendMessage implements ShouldQueue
      * @param string $mobile
      * @param string $message
      */
-    public function __construct(string $mobile, string $message)
+    public function __construct(string $mobile, string $message, string $senderId = null)
     {
         $this->mobile = $mobile;
         $this->message = $message;
+        $this->senderId = $senderId;
     }
 
     /**
@@ -46,7 +50,7 @@ class SendMessage implements ShouldQueue
 
     protected function send()
     {
-        tap(new SendHttpApiParams($this->service, $this->mobile, $this->message), function ($params) {
+        tap(new SendHttpApiParams($this->service, $this->mobile, $this->message, $this->senderId), function ($params) {
             $this->service->send($params->toArray(), ServiceMode::SMS);    
         });
     }
