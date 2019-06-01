@@ -13,25 +13,46 @@ class TransferAirtimeTest extends TestCase
 {
     use WithFaker;
 
+    protected $service;
+
+    protected $mobile;
+
+    protected $amount;
+
+    protected $reference;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->service = Mockery::mock(EngageSpark::class);
+        $this->mobile = $this->faker->phoneNumber;
+        $this->amount = $this->faker->numberBetween(25,100);
+        $this->reference = Str::random(5);
+    }
+
     /** @test */
     public function job_can_transfer_airtime()
     {
         /*** arrange ***/
-        $service = Mockery::mock(EngageSpark::class);
-        $params = new TopupHttpApiParams(
-            $service,
-            $mobile = $this->faker->phoneNumber,
-            $amount = $this->faker->numberBetween(25,100),
-            $reference = Str::random(5)
-        );
-
-        $job = new TransferAirtime($params);
+        // $params = new TopupHttpApiParams(
+        //     $service,
+        //     $mobile = $this->faker->phoneNumber,
+        //     $amount = $this->faker->numberBetween(25,100),
+        //     $reference = Str::random(5)
+        // );
+        $job = new TransferAirtime($this->mobile, $this->amount, $this->reference);
 
         /*** assert ***/
-        $service->shouldReceive('getOrgId')->once();
-        $service->shouldReceive('send')->once();
+        $this->service->shouldReceive('getOrgId')->once();
+        $this->service->shouldReceive('send')->once();
 
         /*** act ***/
-        $job->handle($service);
+        $job->handle($this->service);
+
+        /*** assert ***/
+        $this->assertEquals($this->mobile, $job->mobile);
+        $this->assertEquals($this->amount, $job->amount);
+        $this->assertEquals($this->reference, $job->reference);
     }
 }

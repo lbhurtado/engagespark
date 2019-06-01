@@ -8,6 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use LBHurtado\EngageSpark\Classes\ServiceMode;
 use  LBHurtado\EngageSpark\Classes\TopupHttpApiParams;
 
 class TransferAirtime implements ShouldQueue
@@ -16,16 +17,26 @@ class TransferAirtime implements ShouldQueue
 
     const MODE = 'topup';
 
-    /** @var TopupHttpApiParams */
-    public $params;
+    /** @var string */
+    public $mobile;
+
+    /** @var int */
+    public $amount;
+
+    /** @var string */
+    public $reference;
 
     /**
      * TopupAmount constructor.
-     * @param TopupHttpApiParams $params
+     * @param string $mobile
+     * @param int $amount
+     * @param string $reference
      */
-    public function __construct(TopupHttpApiParams $params)
+    public function __construct(string $mobile, int $amount, string $reference)
     {
-        $this->params = $params;
+        $this->mobile = $mobile;
+        $this->amount = $amount;
+        $this->reference = $reference;
     }
 
     /**
@@ -34,6 +45,20 @@ class TransferAirtime implements ShouldQueue
      */
     public function handle(EngageSpark $service)
     {
-        $service->send($this->params->toArray(), self::MODE);
+        $this->setService($service)->topup();
+    }
+
+    protected function topup()
+    {
+        tap(new TopupHttpApiParams($this->service, $this->mobile, $this->amount, $this->reference), function ($params) {
+            $this->service->send($params->toArray(), ServiceMode::TOPUP);    
+        });
+    }
+
+    protected function setService(EngageSpark $service)
+    {
+        $this->service = $service;
+
+        return $this;
     }
 }

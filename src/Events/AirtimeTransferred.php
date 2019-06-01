@@ -9,23 +9,32 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use  LBHurtado\EngageSpark\Classes\TopupHttpApiParams;
 
 class AirtimeTransferred
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /** @var TopupHttpApiParams */
-    public $params;
+    /** @var string */
+    public $mobile;
+
+    /** @var int */
+    public $amount;
+
+    /** @var string */
+    public $reference;
 
     /**
      * Create a new event instance.
      *
-     * @param TopupHttpApiParams $params
+     * @param string $mobile
+     * @param int $amount
+     * @param string $reference
      */
-    public function __construct(TopupHttpApiParams $params)
+    public function __construct($this->mobile, $this->amount, $this->reference)
     {
-        $this->params = $params;
+        $this->mobile = $mobile;
+        $this->amount = $amount;
+        $this->reference = $reference;
     }
 
     /**

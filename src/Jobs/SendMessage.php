@@ -31,6 +31,7 @@ class SendMessage implements ShouldQueue
      * SendMessage constructor.
      * @param string $mobile
      * @param string $message
+     * @param string $senderId
      */
     public function __construct(string $mobile, string $message, string $senderId = null)
     {

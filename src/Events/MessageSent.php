@@ -10,7 +10,6 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-
 class MessageSent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
@@ -27,7 +26,9 @@ class MessageSent
     /**
      * Create a new event instance.
      *
-     * @param SendHttpApiParams $params
+     * @param string $mobile
+     * @param string $message
+     * @param string $senderId
      */
     public function __construct(string $mobile, string $message, string $senderId)
     {
