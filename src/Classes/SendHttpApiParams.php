@@ -34,7 +34,7 @@ class SendHttpApiParams implements HttpApiParams
      * @param $mobile
      * @param $message
      */
-    public function __construct(EngageSpark $service, string $mobile, string $message)
+    public function __construct(EngageSpark $service, string $mobile, string $message) //TODO: add sender_id
     {
         $this->service = $service;
         $this->mobile = $mobile;
