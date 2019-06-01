@@ -21,15 +21,19 @@ class MessageSent
     /** @var string */
     public $message;
 
+    /** @var string */
+    public $senderId;
+
     /**
      * Create a new event instance.
      *
      * @param SendHttpApiParams $params
      */
-    public function __construct(string $mobile, string $message)
+    public function __construct(string $mobile, string $message, string $senderId)
     {
         $this->mobile = $mobile;
         $this->message = $message;
+        $this->senderId = $senderId;
     }
 
     /**

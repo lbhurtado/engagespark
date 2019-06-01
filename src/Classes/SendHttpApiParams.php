@@ -44,7 +44,7 @@ class SendHttpApiParams implements HttpApiParams
         $this->service = $service;
         $this->mobile = $mobile;
         $this->message = $message;
-        $this->senderId = $senderId;
+        $this->setSenderId($service, $senderId);
     }
 
     public function toArray(): array
@@ -53,8 +53,15 @@ class SendHttpApiParams implements HttpApiParams
             'organization_id' => $this->service->getOrgId(),
             'mobile_numbers' => Arr::wrap($this->mobile),
             'message' => $this->message,
-            'sender_id' => $this->senderId ?? $this->service->getSenderId(),
+            'sender_id' => $this->senderId,
             'recipient_type' => $this->recipientType,
         ];
+    }
+
+    protected function setSenderId(EngageSpark $service, string $senderId = null)
+    {
+        $this->senderId = $senderId ?? $service->getSenderId();
+
+        return $this;
     }
 }
