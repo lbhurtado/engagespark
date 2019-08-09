@@ -50,11 +50,10 @@ class SendHttpApiParams implements HttpApiParams
     public function toArray(): array
     {
         return [
-            'organization_id' => $this->service->getOrgId(),
-            'mobile_numbers' => Arr::wrap($this->mobile),
+            'orgId' => $this->service->getOrgId(),
+            'to' => $this->mobile,
+            'from' => $this->senderId,
             'message' => $this->message,
-            'sender_id' => $this->senderId,
-            'recipient_type' => $this->recipientType,
         ];
     }
 
