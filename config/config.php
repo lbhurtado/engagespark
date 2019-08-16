@@ -7,7 +7,7 @@ return [
     'org_id' => env('ENGAGESPARK_ORGANIZATION_ID'),
     'sender_id' => env('ENGAGESPARK_SENDER_ID', 'serbis.io'),
     'end_points' => [
-        'sms' => env('ENGAGESPARK_SMS_ENDPOINT', 'https://start.engagespark.com/api/v1/messages/sms'),
+        'sms' => env('ENGAGESPARK_SMS_ENDPOINT', 'https://api.engagespark.com/v1/sms/contact'),
         'topup' => env('ENGAGESPARK_AIRTIME_ENDPOINT', 'https://api.engagespark.com/v1/airtime-topup'),
     ],
     'notification' => [
