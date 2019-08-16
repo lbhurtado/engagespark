@@ -30,7 +30,7 @@ class AirtimeTransferred
      * @param int $amount
      * @param string $reference
      */
-    public function __construct($this->mobile, $this->amount, $this->reference)
+    public function __construct($mobile, $amount, $reference)
     {
         $this->mobile = $mobile;
         $this->amount = $amount;
