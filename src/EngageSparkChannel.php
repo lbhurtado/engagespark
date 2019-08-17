@@ -4,6 +4,7 @@ namespace LBHurtado\EngageSpark;
 
 use Illuminate\Support\Arr;
 use Illuminate\Notifications\Notification;
+use Propaganistas\LaravelPhone\PhoneNumber;
 
 class EngageSparkChannel
 {
@@ -54,34 +55,48 @@ class EngageSparkChannel
      */
     protected function getRecipients($notifiable, Notification $notification)
     {
-        $to = $notifiable->routeNotificationFor('engage_spark', $notification);
-
-        if ($to === null || $to === false || $to === '') {
-            return [];
-        }
-
-        return \is_array($to) ? $to : [$to];
+        return $this->getRecipient($notifiable, $notification);
     }
 
-    protected function sendMessage($recipients, EngageSparkMessage $message)
+    /**
+     * Gets a list of phones from the given notifiable.
+     *
+     * @param  mixed  $notifiable
+     * @param  Notification  $notification
+     *
+     * @return string[]
+     */
+    protected function getRecipient($notifiable, Notification $notification)
+    {
+        $to = $notifiable->routeNotificationFor('engage_spark', $notification);
+
+        if ($to === null || $to === false || $to === []) {
+            return '';
+        }
+
+        $to = \is_array($to) ? Arr::first($to) : $to;
+
+        return $this->getFormattedMobile($to);
+    }
+
+    protected function sendMessage($recipient, EngageSparkMessage $message)
     {
         $this->setMode($message);
 
         switch ($mode = $this->getMode()) {
             case 'sms':
                 $params = [
-                    'organization_id' => $this->getOrgId(),
-                    'mobile_numbers'  => $recipients,
-                    'message'         => $message->content,
-                    'recipient_type'  => $message->recipient_type,
-                    'sender_id'       => $this->getSenderId($message),
+                    'orgId'   => $this->getOrgId(),
+                    'to'      => $recipient,
+                    'message' => $message->content,
+                    'from'    => $this->getSenderId($message),
                 ];
                 break;
 
             case 'topup':
                 $params = [
                     'organizationId'  => $this->getOrgId(),
-                    'phoneNumber'     => Arr::first($recipients),
+                    'phoneNumber'     => $recipient,
                     'maxAmount'       => $message->air_time,
                     'clientRef'       => $this->getClientRef(),
                 ];
@@ -136,5 +151,12 @@ class EngageSparkChannel
         $this->mode = $message->mode;
 
         return $this;
+    }
+
+    protected function getFormattedMobile($to)
+    {
+        return tap(PhoneNumber::make($to, 'PH')->formatE164(), function(&$recipient) {
+            $recipient = preg_replace('/\D/', '', $recipient);
+        });
     }
 }

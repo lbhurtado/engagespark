@@ -5,19 +5,23 @@ namespace LBHurtado\EngageSpark\Tests;
 use Illuminate\Support\Facades\File;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Foundation\Testing\WithFaker;
 use LBHurtado\EngageSpark\EngageSparkServiceProvider;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 class TestCase extends OrchestraTestCase
 {
+    use WithFaker;
+
 	protected $testUser;
-    
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->setUpDatabase($this->app);
         $this->testUser = User::first();
+        $this->faker = $this->makeFaker('en_PH');
     }
 
     /**
@@ -61,7 +65,7 @@ class TestCase extends OrchestraTestCase
             $table->increments('id');
             $table->string('mobile');
         });
-        
+
         $this->createUser(['mobile' => '+639173011987']);
     }
 

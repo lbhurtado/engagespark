@@ -4,6 +4,7 @@ namespace LBHurtado\EngageSpark\Classes;
 
 use Illuminate\Support\Arr;
 use LBHurtado\EngageSpark\EngageSpark;
+use Propaganistas\LaravelPhone\PhoneNumber;
 use LBHurtado\Common\Contracts\HttpApiParams;
 
 class SendHttpApiParams implements HttpApiParams
@@ -51,7 +52,7 @@ class SendHttpApiParams implements HttpApiParams
     {
         return [
             'orgId' => $this->service->getOrgId(),
-            'to' => $this->mobile,
+            'to' => $this->getFormattedMobile(),
             'from' => $this->senderId,
             'message' => $this->message,
         ];
@@ -62,5 +63,12 @@ class SendHttpApiParams implements HttpApiParams
         $this->senderId = $senderId ?? $service->getSenderId();
 
         return $this;
+    }
+
+    protected function getFormattedMobile()
+    {
+        return tap(PhoneNumber::make($this->mobile, 'PH')->formatE164(), function(&$recipient) {
+            $recipient = preg_replace('/\D/', '', $recipient);
+        });
     }
 }

@@ -11,15 +11,12 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Handler\MockHandler;
 use LBHurtado\EngageSpark\EngageSpark;
 use GuzzleHttp\Exception\RequestException;
-use Illuminate\Foundation\Testing\WithFaker;
 use LBHurtado\EngageSpark\Classes\ServiceMode;
 use LBHurtado\EngageSpark\Classes\SendHttpApiParams;
 use LBHurtado\EngageSpark\Classes\TopupHttpApiParams;
 
 class EngageSparkTest extends TestCase
 {
-    use WithFaker;
-
     /** @var \GuzzleHttp\Client */
     protected $client;
 
@@ -52,7 +49,7 @@ class EngageSparkTest extends TestCase
         /*** arrange ***/
         $params = new SendHttpApiParams(
             $service = new EngageSpark($this->client),
-            $mobile =  $this->faker->phoneNumber,
+            $mobile =  $this->faker->mobileNumber,
             $message = $this->faker->sentence
         );
 
@@ -95,7 +92,7 @@ class EngageSparkTest extends TestCase
         $this->assertEquals(json_decode($json, true), $response);
     }
 
-   // /** @test */
+//    /** @test */
     public function service_actually_sends_a_message()
     {
         /*** arrange ***/
