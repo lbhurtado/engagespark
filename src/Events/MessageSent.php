@@ -30,7 +30,7 @@ class MessageSent
      * @param string $message
      * @param string $senderId
      */
-    public function __construct(string $mobile, string $message, string $senderId)
+    public function __construct(string $mobile, string $message, string $senderId = null)
     {
         $this->mobile = $mobile;
         $this->message = $message;
