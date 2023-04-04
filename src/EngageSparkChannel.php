@@ -155,7 +155,7 @@ class EngageSparkChannel
 
     protected function getFormattedMobile($to)
     {
-        return tap(PhoneNumber::make($to, 'PH')->formatE164(), function(&$recipient) {
+        return tap((new PhoneNumber($to, 'PH'))->formatE164(), function(&$recipient) {
             $recipient = preg_replace('/\D/', '', $recipient);
         });
     }
