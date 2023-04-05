@@ -4,6 +4,8 @@ namespace LBHurtado\EngageSpark;
 
 use GuzzleHttp\Client as HttpClient;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Notifications\ChannelManager;
 
 class EngageSparkServiceProvider extends ServiceProvider
 {
@@ -31,6 +33,12 @@ class EngageSparkServiceProvider extends ServiceProvider
                 // 'timeout'         => 5,
                 // 'connect_timeout' => 5,
             ]));
+        });
+        
+        Notification::resolved(function (ChannelManager $service) {
+            $service->extend('engage_spark', function ($app) {
+                return new EngageSparkChannel($app->make(EngageSpark::class));
+            });
         });
     }
 }
